@@ -4,7 +4,7 @@
 
 - all regular files belonging to you; put the result in the file /tmp/findme and errors in/dev/null
   ![text](screenshots/2-1.png)
-  ![text](/screenshots/2-2.png)
+  ![text](screenshots/2-2.png)
 
 - all subdirectories of /etc
   ![text](screenshots/3.png)
