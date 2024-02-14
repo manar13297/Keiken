@@ -1,5 +1,5 @@
 # Let's explain how is permission granted to delete a file?
-In Linux, permission to delete a file is granted by the permission on the directory containing the file, not the permissions on the file itself. If you have the permission to modify a directory, you can delete files within it. However, there's a special rule called the `sticky bit` for shared folders, like the "Temp" folder, where many people can add files. This rule says that even if you can add files to "Temp," you can only delete the files you own, not those added by others. This keeps your files safe from being deleted by someone else.
+In Linux, permission to delete a file is granted by the permission on the directory containing the file, not the permissions on the file itself. If you have the permission to modify a directory, you can delete files within it.
 
 # Create a file that my colleague can edit but not delete and another he can delete but not edit.
 While the right to delete is bound to the containing file, I'll need:
