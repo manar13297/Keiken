@@ -15,7 +15,7 @@ ARP poisoning involves sending unsolicited ARP replies to falsely associate the 
 
 ## Environement
 - Kali linux imported in Oracle Virtual box [Kali linux VM](https://www.kali.org/get-kali/#kali-virtual-machines)
-- Your local machine or another VM (in this case, my windows local machine)
+- Your local machine or another guest VM (in this case, it is my windows local machine)
 - Connected to internet
 ## Scenario of what we gonna do
 #### Parts of this scenario
@@ -44,7 +44,42 @@ sudo sysctl net.ipv4.ip_forward=1
 >
 > This command make IP forwarding enabled on Kali Linux to allow it to act as a router, forwarding packets between the Windows machine and the gateway. This step ensures that while Kali intercepts the traffic, it also maintains network connectivity by relaying packets, preventing the network from detecting the attack due to dropped connections.
 
-....To be continued
+- Look for ip and mac address of these three devices
+  - in your Kali linux
 
+Execute the command below to know your ip and mac address:
+```bash 
+ifconfig
+```
+![text](screenshots/ifconfig_kali.png)
 
+  - in Windows
 
+Execute the command below to know your ip and mac address:
+```bash 
+ipconfig /all
+```
+- Let's take a look if these devices know about each others
+  -in your kali linux
+```bash 
+arp-a
+```
+![text](screenshots/arp_kali.png)
+*My Guest VM only knows about the gateway*
+
+-in Windows
+```bash 
+arp-a
+```
+![text](screenshots/arp_windows.png)
+
+> **arp-a**
+> it displays the ARP table, which contains IP addresses mapped to the corresponding MAC addresses for devices on your local network.
+
+These two devices (Windows & Kali) communicate through the same gateway, they are in the same network
+- Open wireshark tool in kali linux
+- Open Ettervap_graphical tool in kali linux
+  - Leave options as they are, and hit check button
+    ![text](screenshots/ethercap_homescreen.png)
+
+  - 
