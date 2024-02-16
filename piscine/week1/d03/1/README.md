@@ -99,6 +99,7 @@ These two devices (Windows & Kali) communicate through the same gateway, they ar
 
 
 - Arp tables
+
 ![text](screenshots/arp_windows_after.png)
 *Now, the windows machine has the kali linux address mac for the gateway address ip*
 
