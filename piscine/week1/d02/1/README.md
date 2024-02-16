@@ -90,6 +90,6 @@ grep -E '^/dev/[a-zA-Z0-9]+' /etc/fstab
 ``` 
 ## Display configuration files in /etc that contain numbers in their names.
 ```bash 
-ls /etc/*[0-9]*
+ls /etc/*[0-9]*.conf
 ``` 
 ![text](screenshots/10.png)
