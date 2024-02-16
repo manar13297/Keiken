@@ -99,7 +99,7 @@ These two devices (Windows & Kali) communicate through the same gateway, they ar
 
 
 - Arp tables
-    ![text](screenshots/arp_windows_after.png)
+![text](screenshots/arp_windows_after.png)
 *Now, the windows machine has the kali linux address mac for the gateway address ip*
 
 **Now we can capture any trafic from windows machine to the internet and vice versa**, Altough we're able to do that, it doesn't mean that we're able to decrypt everything captured (espicially TLS sessions). 
