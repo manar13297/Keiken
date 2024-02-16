@@ -74,6 +74,7 @@ arp-a
 ![text](screenshots/arp_windows.png)
 
 > **arp-a**
+> 
 > it displays the ARP table, which contains IP addresses mapped to the corresponding MAC addresses for devices on your local network.
 
 These two devices (Windows & Kali) communicate through the same gateway, they are in the same network
@@ -82,4 +83,23 @@ These two devices (Windows & Kali) communicate through the same gateway, they ar
   - Leave options as they are, and hit check button
     ![text](screenshots/ethercap_homescreen.png)
 
-  - 
+  - Hit the search button (it scans the local subnet)
+  - Click in "Hosts Lists" button at the top bar to dispaly scanned hosts
+  - Choose your windows machine as "target 1" and the gateway as "target 2" (or vice versa)
+## Let's see what happened 
+- Let's check wireshark captures
+  - ARP Frames sent to windows
+![text](screenshots/arp_to_windows.png)
+*Kali send **an unsolicited arp replay (arp response that it never asked for)** to the target 192.168.43.129 (windows machine) pretending that he is the sender 192.168.43.1 (gateway adress) by sending his mac address (7e:f5)*
+
+
+  - ARP Frames sent to the gateway
+  ![text](screenshots/arp_to_gateway.png)
+*The same thing here with the gateway as a target*
+
+
+- Arp tables
+    ![text](screenshots/arp_windows_after.png)
+*Now, the windows machine has the kali linux address mac for the gateway address ip*
+
+**Now we can capture any trafic from windows machine to the internet and vice versa**, Altough we're able to do that, it doesn't mean that we're able to decrypt everything captured (espicially TLS sessions). 
