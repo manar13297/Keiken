@@ -16,4 +16,13 @@ class ComposedBeverageTest {
         assertEquals(1.45 ,coffeWithMilkAndCream.price());
     }
 
+    @Test
+    void ComputeCoffePrice(){
+        var coffe = new BaseBeverage("COFFE", Main.COFFE_PRICE);
+
+        var coffeOrder = new ComposedBeverage(coffe , Arrays.asList());
+        assertEquals(1.20 ,coffeOrder.price());
+    }
+
+
 }
