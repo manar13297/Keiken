@@ -149,5 +149,10 @@ kube-apiserver --etcd-servers=http://localhost:2379 --service-cluster-ip-range-1
 ps -au | grep apiserver
 ```
 ![text](scshots/ps_apiserver.png?raw=true)
-
-- Interact with the Kubernetes API server.
+- check nodes
+```bash
+curl http://localhost:8080/api/v1/nodes
+```
+![text](scshots/no_nodes.png?raw=true)
+*We can't see any nodes beacause kubelet is not yet connected to the api server*
+## Step 6: connect kubelet to the api server
