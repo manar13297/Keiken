@@ -102,11 +102,11 @@ docker ps
 
 *If everything went okey, we must see our pod started* (we can see a /pause container. It is not just a container running, it's a pod.)
 >**Note**
-> 
-> make sure that swap is disabled. (execute the command swapoff -a)
-> 
+
 > If you can't see your pod, check your kubelet.log file.
 > If there is an error message like: mountpoint to cpu not found, check this [link](problem_mountpointCpu.md) to solve your problem
+> make sure that swap is disabled. (this command will disable it until the next boot `swapoff -a`)
+
 - check if the pod is doing its job
 ```bash 
 docker logs <your_container_id>
