@@ -39,7 +39,7 @@ ls
 ```bash 
 mv kube-apiserver kubectl kubelet kube-proxy kube-scheduler kube-controller-manager /usr/bin
 ```
-## Step 4: install kubelet1
+## Step 4: install kubelet
 - Create a directory for kubernetes manifests for the kubelet.
 ```bash 
 mkdir -p /etc/kubernetes/manifests
@@ -60,13 +60,13 @@ ps -au | grep kubelet
 ```
 ![text](scshots/install_kubelet.png?raw=true)
 - check logs 
-- 
+
 ```bash 
 head /etc/kubernetes/kubelet.log
 ```
 ![text](scshots/kubelet_logs_1.png?raw=true)
 
-## Step 5: 
+## Step 5: Create a pod
 - Create a file in etc/kubernetes/manifests directory (The file wii be a kubernetes pod).
 ```bash 
 nano /etc/kubernetes/manifests/kubelet-test.yaml
@@ -109,6 +109,45 @@ docker ps
 > If there is an error message like: mountpoint to cpu not found, check this [link](problem_mountpointCpu.md) to solve your problem
 - check if the pod is doing its job
 ```bash 
-docker ps <your_container_id>
+docker logs <your_container_id>
 ```
 ![text](scshots/print_kintern.png?raw=true)
+
+## Step 6: kubernetes api server
+
+### install and start etcd
+**In order to set up our kubernetes api server we should have etcd as a flag that the api servers pointed to.**
+
+etcd wil be the state store of our cluster. It's kind of a library where the history and the information for our cluster can be stored.
+- Get etcd
+```bash
+wget https://github.com/etcd-io/etcd/releases/download/v3.2.26/etcd-v3.2.26-linux-amd64.tar.gz
+```
+```bash
+tar -xzf etcd-v3.2.26-linux-amd64.tar.gz
+mv etcd-v3.2.26-linux-amd64/etcd /usr/bin/etcd
+mv etcd-v3.2.26-linux-amd64/etcdctl /usr/bin/etcdctl
+```
+- Start etcd
+```bash
+etcd --listen-client-urls http://0.0.0.0:2379 --advertise-client-urls http://localhost:2379 &> /etc/kubernetes/etcd.log &
+```
+- Check cluster health
+```bash
+etcdctl cluster-health
+```
+
+![text](scshots/etcd_healthy.png?raw=true)
+
+*etcd will accept client connections from any IP address on port 2379. It will advertise itself as available for client connections only on localhost.*
+
+### Start kubernetes api server
+```bash
+kube-apiserver --etcd-servers=http://localhost:2379 --service-cluster-ip-range-10.0.0.0/16 --bind-address-0.0.0.0 --insecure-bind-address-0.0.0.0 &> /etc/kubernetes/apiserver.log &
+```
+```bash
+ps -au | grep apiserver
+```
+![text](scshots/ps_apiserver.png?raw=true)
+
+- Interact with the Kubernetes API server.
