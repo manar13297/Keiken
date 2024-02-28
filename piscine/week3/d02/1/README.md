@@ -1,8 +1,8 @@
 # How to Install Kubernetes Cluster from Scratch?
 
 > This lab is conducted within an Ubuntu virtual machine environment.
-## Step 1: create your virtual machine and set it up within VirtualBox or any other virtualization software.
-## Step 2: access your VM via SSH or utilize the interface provided by your virtualization software to launch the VM.
+## Step 1: create your virtual machine and set it up within VirtualBox or any other hypervisor.
+## Step 2: access your VM via SSH or utilize the interface provided by your hypervisor to launch the VM.
 
 
 ## Step 3: install docker
