@@ -84,7 +84,7 @@ Paste this inside the file:
 > 
 >       containers:
 > 
->         name: alpine 
+>         - name: alpine 
 > 
 >         image: alpine 
 > 
@@ -92,6 +92,7 @@ Paste this inside the file:
 >
 >         args: ["while true; do echo k_intenship_2024; sleep 15; done"]
 
+![text](scshots/kubelet_yaml.png?raw=true)
 
 *when this Pod is created in Kubernetes, it will launch a single container based on the Alpine Linux image. This container will continuously echo "k_intenship_2024" every 15 seconds.*
 
@@ -156,3 +157,132 @@ curl http://localhost:8080/api/v1/nodes
 ![text](scshots/no_nodes.png?raw=true)
 *We can't see any nodes beacause kubelet is not yet connected to the api server*
 ## Step 6: connect kubelet to the api server
+### connect kubectl
+- Set a cluster
+```bash
+kubectl config set-cluster kube-from-scratch --server=http://localhost:8080
+```
+- Set a context pointing to the previous cluster kube-from-scratch
+```bash
+kubectl config set-context kube-from-scratch --cluster=kube-from-scratch 
+```
+- Check the kube file config
+```bash
+kubectl config view
+```
+![text](scshots/kubctl_config.png?raw=true)
+- Set our current context
+```bash
+kubectl config use-context kube-from-scratch
+```
+```bash
+kubectl get all --all-namespaces
+```
+![text](scshots/kubectl_talkingto_apiserver.png?raw=true)
+### connect kubelet
+```bash
+pkill -f kubelet
+```
+```bash
+kubelet --register-node --kubeconfig=".kube/config" &> /etc/kubernetes/kubelet.log &
+```
+```bash
+kubectl get nodes
+```
+![text](scshots/kubectl_get_nodes.png?raw=true)
+>**If we run now `docker ps`, we won't see any pod!**
+> 
+> We're no longer pointing to manifests, we're only taking instructions from the api server now.
+
+## Step 7: create a pod using the api server
+```bash
+cat <<EOF > ./kube-test.yaml
+```
+![text](scshots/kube_test_yaml.png?raw=true)
+*This pod will run nginx*
+
+```bash
+kubectl create -f kube-test.yaml
+```
+- check pod status
+```bash
+kubectl get pod
+```
+![text](scshots/pod_still_pending.png?raw=true)
+*As you can see, our pod is still pending. It will never get scheduled, because it waits for a **scheduler** to inform it where it needs to go*
+- Set a scheduler
+```bash
+kube-scheduler --master=http://localhost:8080/ &> /etc/kubernetes/scheduler.log &
+```
+- Check pod status
+```bash
+kubectl get pod
+```
+![text](scshots/pod_running.png?raw=true)
+## Step 8: delete the pod
+
+```bash
+kubectl delete pod kube-test
+```
+OR
+```bash
+kubectl delete pod --all
+```
+*since we have just one pod*
+
+## Step 9: create a deployment
+- Create a replica yaml
+```bash
+nano ./replica-test.yaml
+```
+OR
+```bash
+cat <<EOF > ./replica-test.yaml
+```
+![text](scshots/replica_test.png?raw=true)
+
+```bash
+kubectl create -f replica-test.yaml
+```
+- start the kube controller manager
+```bash
+kube-controller-manager --master=http://localhost:8080 &> /etc/kubernetes/controller-manager.log &
+```
+- check deployment
+```bash
+kubectl get deploy
+```
+![text](scshots/get_deploy.png?raw=true)
+- check pods status
+```bash
+kubectl get pod
+```
+![text](scshots/pods_status.png?raw=true)
+## Step 10: create a service
+- create a service yaml
+```bash
+cat <<EOF > ./service-test.yaml
+```
+![text](scshots/service_yaml.png?raw=true)
+```bash
+kubectl create -f service-test.yaml
+```
+*For now we can't interact with our service. We need some other component that will handel the networking in our cluster, which is a kube proxy*
+
+- start a kube proxy
+```bash
+kube-proxy --master=http://localhost:8080/ &> /etc/kubernetes/proxy.log &
+```
+- get service
+
+```bash
+kubectl get svc
+```
+![text](scshots/get_svc.png?raw=true)
+- curl the service
+```bash
+curl <ip_address_of_service>:80
+```
+![text](scshots/nginx_resp.png?raw=true)
+*in my case: curl 10.0.181.224:80 will return the nginx response*
+
