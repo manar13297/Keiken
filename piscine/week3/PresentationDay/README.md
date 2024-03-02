@@ -1,5 +1,10 @@
 # Deploy chatgpt api on minikube using Helm Chart
-
+>**Note**: Helm's capabilities extend far beyond what will be showcased in this demo. While our demonstration focused on substituting values in a values.yaml file to deploy our monolithic app, it's important to recognize that Helm serves a much broader purpose in the software development lifecycle. 
+>
+>One of Helm's key features is its ability to manage configuration across different environments. Instead of manually copying and pasting variables between development and production environments, Helm streamlines this process.
+>
+>Furthermore, Helm simplifies version management. With Helm charts, developers can easily upgrade applications to newer versions, taking advantage of the latest features and bug fixes. Conversely, if issues arise, Helm enables quick rollback to a previous version, minimizing downtime and ensuring stability.
+------------------------------------------------------
 ## Prerequirements
 - The app is already dockerized
   - jar generated
