@@ -19,7 +19,5 @@
 ## AFTER
 !["text"](scShots/after3.png)
 
-# Challenge 4
-!["text"](scShots/4.png)
 
 
