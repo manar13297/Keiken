@@ -1,0 +1,58 @@
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.0
+    container_name: smartCv-zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper
+    networks:
+      - kafka_net
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: smartCv-kafka
+    ports:
+      - "8098:8098"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: smartCv-zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:8097,INTERNAL://smartCv-kafka:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+    volumes:
+      - kafka_data:/var/lib/kafka
+    networks:
+      - kafka_net
+    depends_on:
+      - zookeeper
+
+  kafka-1:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: smartCv-kafka-1
+    ports:
+      - "8099:8099"
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: smartCv-zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:8099,INTERNAL://smartCv-kafka-1:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+    volumes:
+      - kafka_data:/var/lib/kafka
+    networks:
+      - kafka_net
+    depends_on:
+      - zookeeper
+volumes:
+  zookeeper_data:
+  kafka_data:
+
+networks:
+  kafka_net:
+    driver: "bridge"
