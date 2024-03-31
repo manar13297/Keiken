@@ -9,7 +9,7 @@ produce_messages() {
         RANDOM_KEY=${KEYS[$((RANDOM % ${#KEYS[@]}))]}
         TIMESTAMP=$(date +%s%3N)
         echo "$RANDOM_KEY:  From producer $1 at $TIMESTAMP with key $RANDOM_KEY"
-    done | docker exec -i smartCv-kafka kafka-console-producer --broker-list localhost:9092 --topic $TOPIC --property "parse.key=true" --property "key.separator=:"
+    done | docker exec -i smartCv-kafka kafka-console-producer --bootstrap-server localhost:9092 --topic $TOPIC --property "parse.key=true" --property "key.separator=:"
 }
 
 produce_messages 1 &

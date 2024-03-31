@@ -5,8 +5,9 @@ TOPIC="single-partition-topic"
 produce_messages() {
     for i in {1..5}; do
         TIMESTAMP=$(date +%s%3N)
-        echo "Message from producer $1: $i at $TIMESTAMP"
-    done | docker exec -i smartCv-kafka kafka-console-producer --broker-list localhost:9092 --topic $TOPIC
+        echo "from producer $1: $i at $TIMESTAMP"
+        sleep 10
+    done | docker exec -i smartCv-kafka kafka-console-producer --bootstrap-server localhost:9092 --topic $TOPIC
 }
 
 produce_messages 1 &

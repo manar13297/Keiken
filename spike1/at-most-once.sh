@@ -13,7 +13,9 @@ produce_messages() {
         echo "$MESSAGE"
         echo "$MESSAGE" >> "$log_file"
 
-        echo "$MESSAGE" | docker exec -i smartCv-kafka kafka-console-producer --broker-list localhost:9092 --topic $TOPIC --property "acks=0"
+        echo "$MESSAGE" | docker exec -i smartCv-kafka kafka-console-producer --broker-list localhost:9092 --topic $TOPIC \
+        --property "acks=0" \
+        --property "retries=0"
 
         if [ $? -ne 0 ]; then
             echo "Failed to send message: $MESSAGE" >> "$log_file"
